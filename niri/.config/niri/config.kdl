@@ -285,7 +285,7 @@ spawn-at-startup "waypaper" "--restore"
 spawn-at-startup "bash" "-c" "/home/daphen/.config/kanata/start-kanata.sh"
 
 // Start focus tracker for window history
-spawn-sh-at-startup "/home/daphen/.local/bin/niri-focus-tracker >> /tmp/niri-focus-tracker.log 2>&1"
+spawn-sh-at-startup "/home/daphen/.config/niri/scripts/niri-focus-tracker >> /tmp/niri-focus-tracker.log 2>&1"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -406,17 +406,17 @@ binds {
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     // Jump-or-exec keybinds for quick app access
-    Super+c { spawn-sh "$HOME/.local/bin/niri-jump-or-exec vesktop 'vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
+    Super+c { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec vesktop 'vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
     Super+e { spawn-sh "$HOME/.config/niri/scripts/spawn-terminal-with-yazi"; }
     Super+r { spawn-sh "$HOME/.config/niri/scripts/spawn-terminal-with-zoxide-picker"; }
     Super+g { spawn-sh "$HOME/.config/niri/scripts/spawn-terminal-with-claude"; }
-    Super+f { spawn-sh "$HOME/.local/bin/niri-jump-or-exec zen zen-browser"; }
+    Super+f { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec zen zen-browser"; }
     Super+Shift+f { spawn "zen-browser"; }
-    Super+d { spawn-sh "$HOME/.local/bin/niri-jump-or-exec org.wezfurlong.wezterm wezterm"; }
+    Super+d { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec org.wezfurlong.wezterm wezterm"; }
     Super+Shift+d { spawn "wezterm"; }
-    Super+s { spawn-sh "$HOME/.local/bin/niri-jump-or-exec Slack '/usr/bin/slack --disable-gpu-compositing --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --enable-features=WebRTCPipeWireCapturer --enable-features=WaylandWindowDecorations --disable-features=WaylandFractionalScaleV1'"; }
-    Super+a { spawn-sh "$HOME/.local/bin/niri-jump-or-exec Spotify 'spotify --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
-    Super+t { spawn-sh "$HOME/.local/bin/niri-jump-or-exec 'Microsoft Teams - Preview' 'teams --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
+    Super+s { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec Slack '/usr/bin/slack --disable-gpu-compositing --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --enable-features=WebRTCPipeWireCapturer --enable-features=WaylandWindowDecorations --disable-features=WaylandFractionalScaleV1'"; }
+    Super+a { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec Spotify 'spotify --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
+    Super+t { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'Microsoft Teams - Preview' 'teams --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
 
     // Theme toggle
     Super+Ctrl+t hotkey-overlay-title="Toggle Theme" { spawn-sh "fish -c toggle_theme"; }
