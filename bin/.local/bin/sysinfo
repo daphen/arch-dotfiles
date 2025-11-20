@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Use fastfetch with sixel protocol for proper image display in tmux
+# Config is in ~/.config/fastfetch/config.jsonc
+fastfetch

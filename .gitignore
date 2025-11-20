@@ -1,0 +1,20 @@
+# Fish shell
+fish/.config/fish/fish_variables
+fish/.config/fish/fish_history
+
+# Themes
+themes/.config/themes/generated/
+themes/.config/themes/*.log
+themes/.config/themes/.current-theme
+
+# Temporary files
+*.swp
+*.tmp
+*.bak
+*~
+.DS_Store
+
+# Private/sensitive files
+*.key
+*.pem
+secrets/
