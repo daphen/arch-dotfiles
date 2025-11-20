@@ -7,6 +7,8 @@ My personal configuration files for Arch Linux, managed with GNU Stow.
 - **niri** - Scrollable tiling Wayland compositor configuration
 - **waybar** - Status bar configuration and scripts
 - **fish** - Fish shell configuration and functions
+- **nvim** - Neovim configuration with plugins and custom theme
+- **wezterm** - WezTerm terminal emulator configuration
 - **kanata** - Keyboard remapping configuration
 - **themes** - Centralized theme management system
 - **systemd** - User systemd services
@@ -28,7 +30,7 @@ git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
 
 # Deploy all configurations
 cd ~/dotfiles
-stow niri waybar fish kanata themes systemd bin
+stow niri waybar fish nvim wezterm kanata themes systemd bin
 
 # Or deploy individual packages
 stow niri  # Just the niri window manager config
@@ -50,6 +52,17 @@ stow niri  # Just the niri window manager config
 - Shell configuration with custom prompt
 - Theme toggling functions
 - Various utility functions
+
+### nvim
+- Complete Neovim configuration with lazy.nvim plugin manager
+- Custom theme integration
+- LSP configuration for multiple languages
+- AI tracker plugin for development notes
+
+### wezterm
+- Terminal configuration with theme integration
+- Custom key bindings
+- Font and appearance settings
 
 ### kanata
 - Custom keyboard layout with Swedish characters
