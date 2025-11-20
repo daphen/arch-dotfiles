@@ -13,6 +13,7 @@ My personal configuration files for Arch Linux, managed with GNU Stow.
 - **themes** - Centralized theme management system
 - **systemd** - User systemd services
 - **bin** - Custom scripts and utilities
+- **claude** - Claude Code hooks and commands configuration
 
 ## Installation
 
@@ -30,7 +31,7 @@ git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
 
 # Deploy all configurations
 cd ~/dotfiles
-stow niri waybar fish nvim wezterm kanata themes systemd bin
+stow niri waybar fish nvim wezterm kanata themes systemd bin claude
 
 # Or deploy individual packages
 stow niri  # Just the niri window manager config
@@ -77,6 +78,13 @@ stow niri  # Just the niri window manager config
 - `niri-focus-tracker` - Window focus history tracker (with memory leak protection)
 - `niri-jump-or-exec` - Jump to or execute applications
 - `sysinfo` - System information display
+
+### claude
+- Custom hooks for enhanced functionality
+- AI tracker integration for development notes
+- Screenshot commands (`/ss`, `/ss2`, `/ss3`)
+- Paste image functionality
+- Local settings overrides
 
 ## Key Bindings
 
