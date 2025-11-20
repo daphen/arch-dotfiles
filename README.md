@@ -42,8 +42,17 @@ stow niri  # Just the niri window manager config
 
 ### niri
 - Window manager configuration (`config.kdl`)
-- Custom navigation scripts for workspace/monitor switching
-- Screenshot to clipboard script
+- **Scripts** (all in `.config/niri/scripts/`):
+  - `niri-focus-tracker` - Window focus history tracker (with memory leak protection)
+  - `niri-jump-or-exec` - Jump to or execute applications
+  - `focus-workspace-down-or-monitor` - Smart workspace/monitor navigation
+  - `focus-workspace-up-or-monitor` - Smart workspace/monitor navigation
+  - `move-window-down-or-monitor` - Move windows across workspaces/monitors
+  - `move-window-up-or-monitor` - Move windows across workspaces/monitors
+  - `spawn-terminal-with-claude` - Open terminal with Claude Code
+  - `spawn-terminal-with-yazi` - Open terminal with Yazi file manager
+  - `spawn-terminal-with-zoxide-picker` - Open terminal with directory picker
+  - `screenshot-to-clipboard` - Screenshot selection to clipboard
 
 ### waybar
 - Status bar configuration
