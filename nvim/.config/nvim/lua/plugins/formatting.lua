@@ -5,7 +5,13 @@ return {
 		local conform = require("conform")
 		local utils = require("utils")
 
-		local root_markers = { ".git", "package.json", "pnpm-workspace.yaml" }
+		local function find_project_root(path)
+			-- Try monorepo/project root markers first
+			local root = utils.find_root_with_markers(path, { ".prettierrc", ".prettierrc.json", "pnpm-workspace.yaml", ".git" })
+			if root then return root end
+			-- Fallback to package.json for simple projects
+			return utils.find_root_with_markers(path, { "package.json" })
+		end
 		local prettier_configs = {
 			".prettierrc",
 			".prettierrc.json",
@@ -40,7 +46,7 @@ return {
 				prettier = {
 					condition = function()
 						local current_path = utils.current_path()
-						local root_path = utils.find_root_with_markers(current_path, root_markers)
+						local root_path = find_project_root(current_path)
 
 						-- Check global prettier first
 						if vim.fn.executable("prettier") == 1 then
@@ -86,7 +92,7 @@ return {
 					end,
 					command = function()
 						local current_path = utils.current_path()
-						local root_path = utils.find_root_with_markers(current_path, root_markers)
+						local root_path = find_project_root(current_path)
 						if not root_path then
 							return "prettier"
 						end
@@ -126,7 +132,7 @@ return {
 					end,
 					args = function(_, ctx)
 						local current_path = utils.current_path()
-						local root_path = utils.find_root_with_markers(current_path, root_markers)
+						local root_path = find_project_root(current_path)
 						local args = { "--stdin-filepath", ctx.filename }
 
 						if vim.fn.fnamemodify(ctx.filename, ":e") == "svg" then
@@ -150,7 +156,7 @@ return {
 					end,
 					cwd = function()
 						local current_path = utils.current_path()
-						return utils.find_root_with_markers(current_path, root_markers) or vim.fn.getcwd()
+						return find_project_root(current_path) or vim.fn.getcwd()
 					end,
 				},
 			},

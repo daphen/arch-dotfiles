@@ -26,11 +26,18 @@ vim.opt.undofile = true
 -- Set cursor to blink in all modes while preserving terminal colors
 opt.guicursor = "n-c-sm:block-blinkon400-blinkoff250," .. "i-ci:ver25," .. "v-ve:hor20," .. "r-cr-o:hor20"
 
--- Highlight when yanking (copying) text
+-- Highlight when yanking (copying) text and sync to primary selection
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
+	desc = "Highlight when yanking and sync to primary selection",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function() vim.highlight.on_yank() end,
+	callback = function()
+		vim.highlight.on_yank()
+		-- Also copy to primary selection for middle-click paste
+		if vim.v.event.operator == "y" then
+			local content = vim.fn.getreg('"')
+			vim.fn.system("wl-copy --primary", content)
+		end
+	end,
 })
 
 -- Color options

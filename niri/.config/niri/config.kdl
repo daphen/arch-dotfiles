@@ -76,16 +76,27 @@ input {
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
 
-// Built-in laptop display - positioned on the LEFT
+// Built-in laptop display - positioned on the RIGHT (external monitor is on the left)
 output "eDP-1" {
     mode "2880x1800@120.000"
     scale 1.5
+    position x=2560 y=0
+}
+
+// Office monitor (Dell U2515H) - positioned to the LEFT of laptop
+// Dell at scale 1.0 is 2560x1440 logical pixels
+// Laptop starts at x=2560
+output "Dell Inc. DELL U2515H 9X2VY5840MWL" {
+    mode "2560x1440@59.951"
+    scale 1.0
     position x=0 y=0
+    focus-at-startup
 }
 
 // External monitor (Technical Concepts 27R83U) - HOME MONITOR - positioned on the RIGHT
-// This monitor connects as DP-1 or DP-2 depending on which port is used
-// Focus this monitor by default when connected
+// TODO: Replace "DP-1" with the full monitor name from `niri msg outputs` when at home
+// Example: output "Technical Concepts 27R83U ABC123" { ... }
+// This avoids conflicts with other monitors that connect as DP-1/DP-2
 // Laptop is 2880x1800 @ scale 1.5 = 1920x1200 logical pixels wide
 // So external monitor starts at x=1920
 output "DP-1" {
@@ -99,18 +110,6 @@ output "DP-2" {
     mode "3840x2160@144.000"
     scale 1.5
     position x=1920 y=0
-    focus-at-startup
-}
-
-// Office monitor (Dell U2515H) - positioned ABOVE laptop
-// Dell at scale 1.0 is 2560x1440 logical pixels
-// Laptop at scale 1.5 is 1920x1200 logical pixels
-// Center Dell horizontally: x = (1920 - 2560) / 2 = -320
-// Position above: y = -1440
-output "Dell Inc. DELL U2515H 9X2VY5840MWL" {
-    mode "2560x1440@59.951"
-    scale 1.0
-    position x=-320 y=-1440
     focus-at-startup
 }
 
@@ -397,7 +396,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: app launcher, screen locker.
-    Super+Space hotkey-overlay-title="Run an Application: vicinae" { spawn "vicinae" "toggle"; }
+    Super+Space hotkey-overlay-title="Run an Application" { spawn "rofi" "-show" "drun"; }
     Super+Ctrl+q hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -486,9 +485,14 @@ binds {
     // Color picker
     Super+Ctrl+c { spawn "niri" "msg" "pick-color"; }  // Pick color from screen
 
-    // Vicinae keybinds
-    Super+Ctrl+V { spawn "vicinae" "vicinae://extensions/vicinae/clipboard/history"; }  // Open clipboard history
-    Super+Ctrl+J { spawn "vicinae" "vicinae://extensions/vicinae/vicinae/search-emojis"; }  // Open emoji picker
-    Super+Ctrl+B { spawn "vicinae" "vicinae://extensions/Gelei/bluetooth/devices"; }  // Open bluetooth devices menu
+    // Rofi keybinds
+    Super+Ctrl+V { spawn "/home/daphen/.config/niri/scripts/clipboard-history.sh"; }  // Open clipboard history
+    Super+Ctrl+J { spawn "rofimoji" "--action" "copy" "type" "--selector" "rofi"; }  // Open emoji picker (copy + auto-type)
+    Super+Ctrl+B { spawn "rofi-bluetooth"; }  // Open bluetooth menu
 }
-spawn-at-startup "vicinae" "server"
+
+// Clipboard management with cliphist
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--primary" "--watch" "cliphist" "store"
+// Sync primary selection to clipboard (fixes wezterm copy mode)
+spawn-at-startup "wl-paste" "--primary" "--watch" "wl-copy"

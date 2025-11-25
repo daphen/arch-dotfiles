@@ -70,10 +70,11 @@ config.window_padding = {
 }
 
 -- Cursor configuration (from Ghostty)
-config.cursor_thickness = 4
+config.cursor_thickness = 1
 
 -- Other settings from Ghostty
 config.hide_mouse_cursor_when_typing = true
+
 config.default_prog = { "/usr/bin/fish" }
 config.window_close_confirmation = "NeverPrompt"
 
@@ -90,6 +91,34 @@ config.keys = {
     mods = "CTRL|SHIFT",
     action = wezterm.action.ReloadConfiguration,
   },
+  -- Paste from clipboard (Ctrl+Shift+V)
+  {
+    key = "v",
+    mods = "CTRL|SHIFT",
+    action = wezterm.action.PasteFrom("Clipboard"),
+  },
+  {
+    key = "V",
+    mods = "CTRL",
+    action = wezterm.action.PasteFrom("Clipboard"),
+  },
 }
+
+-- Override just the 'y' key in copy mode to copy to both clipboard and primary
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+for i, binding in ipairs(copy_mode) do
+  if binding.key == "y" then
+    copy_mode[i] = {
+      key = "y",
+      mods = "NONE",
+      action = wezterm.action.Multiple({
+        wezterm.action.CopyTo("ClipboardAndPrimarySelection"),
+        wezterm.action.CopyMode("Close"),
+      }),
+    }
+    break
+  end
+end
+config.key_tables = { copy_mode = copy_mode }
 
 return config

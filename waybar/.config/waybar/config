@@ -55,7 +55,7 @@
     "tooltip-format-wifi": "󰖨 {essid} ({signalStrength}%)\n{ifname}: {ipaddr}/{cidr}",
     "tooltip-format-ethernet": "󰈀 {ifname}: {ipaddr}/{cidr}",
     "tooltip-format-disconnected": "Disconnected",
-    "on-click": "~/.config/waybar/scripts/wifi-menu.sh"
+    "on-click": "networkmanager_dmenu"
   },
 
   "pulseaudio": {

@@ -13,7 +13,6 @@
     "deny": [],
     "ask": []
   },
-  "model": "opus",
   "hooks": {
     "PostToolUse": [
       {
@@ -27,5 +26,5 @@
       }
     ]
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": false
 }

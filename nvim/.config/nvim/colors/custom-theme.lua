@@ -11,3 +11,4 @@ vim.g.colors_name = "custom-theme"
 
 -- Load our custom theme
 require("theme").setup()
+

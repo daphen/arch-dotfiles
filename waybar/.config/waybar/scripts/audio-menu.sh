@@ -25,7 +25,7 @@ done <<< "$sinks"
 sink_list="${active_device}${other_devices}"
 
 # Show menu and get selection
-selected=$(echo -e "$sink_list" | wofi --dmenu --prompt "Audio Output")
+selected=$(echo -e "$sink_list" | rofi -dmenu -p "Audio Output")
 
 if [ -n "$selected" ]; then
     # Remove the bullet point if present
