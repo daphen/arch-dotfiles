@@ -59,7 +59,7 @@ config.scrollback_lines = 10000
 -- Font configuration (from Ghostty)
 config.font = wezterm.font("GeistMono Nerd Font")
 config.font_size = 13
-config.line_height = 1.25  -- equivalent to adjust-cell-height = 25%
+config.line_height = 1.25 -- equivalent to adjust-cell-height = 25%
 
 -- Window padding
 config.window_padding = {
@@ -70,7 +70,7 @@ config.window_padding = {
 }
 
 -- Cursor configuration (from Ghostty)
-config.cursor_thickness = 1
+config.cursor_thickness = 2
 
 -- Other settings from Ghostty
 config.hide_mouse_cursor_when_typing = true

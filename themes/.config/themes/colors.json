@@ -65,7 +65,7 @@
         "magenta": "accent.purple",
         "cyan": "accent.cyan",
         "white": "foreground.secondary",
-        "bright_black": "background.overlay",
+        "bright_black": "foreground.muted",
         "bright_red": "accent.red",
         "bright_green": "accent.green",
         "bright_yellow": "accent.yellow",

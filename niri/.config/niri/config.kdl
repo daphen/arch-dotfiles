@@ -163,7 +163,7 @@ layout {
     // You can change how the focus ring looks.
     focus-ring {
         // Uncomment this line to disable the focus ring.
-        // off
+        off
 
         // How many logical pixels the ring extends out from the windows.
         width 4
@@ -202,11 +202,10 @@ layout {
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        off
 
-        width 4
-        active-color "#ffc87f"
-        inactive-color "#505050"
+        width 3
+        active-color "#ffffff"
+        inactive-color "#3A3A3A"
 
         // Color of the border around windows that request your attention.
         urgent-color "#9b0000"
@@ -380,6 +379,12 @@ window-rule {
     open-floating true
 }
 
+// Notes window - tiled like other apps
+window-rule {
+    match app-id="notes-scratchpad"
+    // No special rules - behaves like normal tiled window
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -414,8 +419,12 @@ binds {
     Super+d { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec org.wezfurlong.wezterm wezterm"; }
     Super+Shift+d { spawn "wezterm"; }
     Super+s { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec Slack '/usr/bin/slack --disable-gpu-compositing --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --enable-features=WebRTCPipeWireCapturer --enable-features=WaylandWindowDecorations --disable-features=WaylandFractionalScaleV1'"; }
-    Super+a { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec Spotify 'spotify --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
-    Super+t { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'Microsoft Teams - Preview' 'teams --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WaylandWindowDecorations'"; }
+    Super+a { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'title:spotify_player' 'wezterm start --always-new-process -- /usr/bin/spotify_player'"; }
+    Super+t { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'Microsoft Teams' 'teams-for-linux --enable-features=WebRTCPipeWireCapturer --ozone-platform=wayland'"; }
+
+    // Notes - tiled window like spotify/claude
+    Super+n { spawn "/home/daphen/.config/niri/scripts/spawn-notes"; }
+    Super+Shift+n { spawn "/home/daphen/.config/niri/scripts/spawn-new-note"; }
 
     // Theme toggle
     Super+Ctrl+t hotkey-overlay-title="Toggle Theme" { spawn-sh "fish -c toggle_theme"; }
@@ -425,7 +434,10 @@ binds {
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
     XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
-    XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    XF86AudioMicMute allow-when-locked=true { spawn-sh "$HOME/.config/niri/scripts/toggle-mic"; }
+
+    // Camera toggle (F10 key on Asus Zenbook)
+    XF86WebCam allow-when-locked=true { spawn-sh "$HOME/.config/niri/scripts/toggle-camera"; }
 
     // Brightness controls
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }

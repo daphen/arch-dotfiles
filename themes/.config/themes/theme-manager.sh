@@ -126,14 +126,31 @@ apply_tool_theme() {
     
     case "$tool" in
         "nvim")
-            # Copy generated palette to colorscheme directory
-            cp "$generated_file" "$HOME/.config/colorscheme/lua/rose-pine/palette.lua"
-            log_success "Applied Neovim theme"
-            ;;
-        "nvim-custom")
             # Copy generated colors to custom theme directory
             cp "$generated_file" "$HOME/.config/nvim/lua/theme/colors.lua"
-            log_success "Applied custom Neovim theme"
+            log_success "Applied Neovim theme"
+            ;;
+        "mako")
+            # Copy generated config to mako directory
+            cp "$generated_file" "$HOME/.config/mako/config"
+            # Reload mako if running
+            if pgrep -x mako > /dev/null; then
+                makoctl reload
+                log_success "Applied and reloaded Mako theme"
+            else
+                log_success "Applied Mako theme (not running)"
+            fi
+            ;;
+        "waybar")
+            # Copy generated style to waybar directory
+            cp "$generated_file" "$HOME/.config/waybar/style.css"
+            # Reload waybar if running
+            if pgrep -x waybar > /dev/null; then
+                killall -SIGUSR2 waybar
+                log_success "Applied and reloaded Waybar theme"
+            else
+                log_success "Applied Waybar theme (not running)"
+            fi
             ;;
         "fish")
             # Fish themes are applied by Fish itself, not by bash

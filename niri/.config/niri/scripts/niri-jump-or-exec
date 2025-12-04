@@ -1,7 +1,8 @@
 #!/bin/bash
 # Jump to a window if it exists, otherwise launch the app
 # Jumps to most recently active window, then cycles through others
-# Usage: niri-jump-or-exec <app-id> <command>
+# Usage: niri-jump-or-exec <app-id-or-title-pattern> <command>
+# If app-id starts with "title:" it matches against window title instead
 
 APP_ID="$1"
 COMMAND="$2"
@@ -9,8 +10,16 @@ TRACKER_STATE="/tmp/niri-focus-tracker/app-${APP_ID}"
 CYCLE_STATE="/tmp/niri-cycle-${APP_ID}"
 
 if [ -z "$APP_ID" ] || [ -z "$COMMAND" ]; then
-    echo "Usage: niri-jump-or-exec <app-id> <command>"
+    echo "Usage: niri-jump-or-exec <app-id-or-title-pattern> <command>"
     exit 1
+fi
+
+# Check if matching by title
+MATCH_BY_TITLE=false
+PATTERN="$APP_ID"
+if [[ "$APP_ID" == title:* ]]; then
+    MATCH_BY_TITLE=true
+    PATTERN="${APP_ID#title:}"
 fi
 
 # Get currently focused window ID
@@ -26,9 +35,18 @@ for w in windows:
 # Get all window IDs and determine which to focus
 RESULT=$(niri msg --json windows | python3 -c "
 import sys, json
+import re
 try:
     windows = json.load(sys.stdin)
-    matching_windows = [w for w in windows if w.get('app_id') == '$APP_ID']
+    match_by_title = '$MATCH_BY_TITLE' == 'true'
+    pattern = '$PATTERN'
+
+    if match_by_title:
+        # Match by title using regex
+        matching_windows = [w for w in windows if re.search(pattern, w.get('title', ''), re.IGNORECASE)]
+    else:
+        # Match by app_id
+        matching_windows = [w for w in windows if w.get('app_id') == pattern]
 
     if not matching_windows:
         # No windows found
