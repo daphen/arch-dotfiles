@@ -1,9 +1,10 @@
 # Mako notification daemon configuration
+# Generated from centralized theme system
 
 # Font
 font=monospace 11, Noto Emoji 11
 
-# Colors (matching your custom dark theme)
+# Colors
 background-color=#181818
 text-color=#EDEDED
 border-color=#8A9AA6

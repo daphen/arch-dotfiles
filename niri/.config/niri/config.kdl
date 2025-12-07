@@ -274,7 +274,8 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "waybar"
+// Using pgrep guard to prevent multiple waybars spawning on resume/reconnect
+spawn-sh-at-startup "pgrep -x waybar || waybar"
 
 // Auto-restore wallpaper on startup with waypaper
 spawn-at-startup "waypaper" "--restore"

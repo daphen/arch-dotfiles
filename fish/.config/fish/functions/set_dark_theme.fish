@@ -88,5 +88,40 @@ function set_dark_theme --description "Set dark theme"
         touch ~/.config/wezterm/wezterm.lua 2>/dev/null &
     end
 
+    # Update Mako notification daemon
+    set -l mako_theme ~/.config/themes/generated/mako/dark.theme
+    if test -f $mako_theme
+        cp $mako_theme ~/.config/mako/config
+        if pgrep -x mako >/dev/null 2>&1
+            makoctl reload 2>/dev/null &
+        end
+    end
+
+    # Update Waybar
+    set -l waybar_theme ~/.config/themes/generated/waybar/dark.theme
+    if test -f $waybar_theme
+        cp $waybar_theme ~/.config/waybar/style.css
+        if pgrep -x waybar >/dev/null 2>&1
+            killall -SIGUSR2 waybar 2>/dev/null &
+        end
+    end
+
+    # Update spotify-player (restart to apply theme)
+    set -l spotify_theme ~/.config/themes/generated/spotify-player/dark.theme
+    if test -f $spotify_theme
+        cp $spotify_theme ~/.config/spotify-player/theme.toml
+        # Restart if running
+        if pgrep -x spotify_player >/dev/null 2>&1
+            pkill -x spotify_player
+            sleep 0.2
+            spotify_player -d &
+        end
+    end
+
+    # Update Rofi theme
+    if test -f ~/.config/rofi/config.rasi
+        sed -i 's/@import "light.rasi"/@import "dark.rasi"/' ~/.config/rofi/config.rasi
+    end
+
     # Note: Neovim will auto-reload via file watcher on ~/.config/theme_mode
 end

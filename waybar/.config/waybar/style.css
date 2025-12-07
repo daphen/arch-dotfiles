@@ -12,7 +12,7 @@ window#waybar {
 
 /* Left side modules */
 .modules-left {
-  background: rgba(27, 27, 27, 0.85);
+  background: alpha(#1B1B1B, 0.85);
   border-radius: 8px;
   margin: 4px 8px 4px 20px;
   padding: 0px 8px;
@@ -33,7 +33,7 @@ window#waybar {
 
 /* Center module */
 .modules-center {
-  background: rgba(27, 27, 27, 0.85);
+  background: alpha(#1B1B1B, 0.85);
   border-radius: 8px;
   margin: 4px 8px;
   padding: 0px 8px;
@@ -67,7 +67,7 @@ window#waybar {
 
 /* Right side container - all items grouped */
 .modules-right {
-  background: rgba(27, 27, 27, 0.85);
+  background: alpha(#1B1B1B, 0.85);
   border-radius: 8px;
   margin: 4px 20px 4px 8px;
   padding: 0px 8px;
@@ -101,7 +101,7 @@ window#waybar {
 }
 
 #network {
-  color: #B4D3B2;
+  color: #97B5A6;
 }
 
 #network.disconnected {
@@ -109,7 +109,7 @@ window#waybar {
 }
 
 #pulseaudio {
-  color: #A8C5E3;
+  color: #CCD5E4;
 }
 
 #pulseaudio.muted {
@@ -117,8 +117,8 @@ window#waybar {
 }
 
 tooltip {
-  background: rgba(27, 27, 27, 0.95);
-  border: 1px solid rgba(138, 154, 166, 0.2);
+  background: alpha(#1B1B1B, 0.95);
+  border: 1px solid alpha(#8A9AA6, 0.2);
   border-radius: 8px;
 }
 

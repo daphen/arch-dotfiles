@@ -117,18 +117,9 @@ return {
 						sources = { "nvim_lsp" },
 						symbols = { error = " ", warn = " ", info = " " },
 						diagnostics_color = {
-							error = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.error }
-							end,
-							warn = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.warning }
-							end,
-							info = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.info }
-							end,
+							error = "DiagnosticError",
+							warn = "DiagnosticWarn",
+							info = "DiagnosticInfo",
 						},
 					},
 					{
@@ -136,18 +127,9 @@ return {
 						sources = { "nvim_lsp" },
 						symbols = { error = "E:", warn = "W:", info = "I:" },
 						diagnostics_color = {
-							error = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.error }
-							end,
-							warn = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.warning }
-							end,
-							info = function() 
-								local colors = require("theme.colors").get_colors()
-								return { fg = colors.info }
-							end,
+							error = "DiagnosticError",
+							warn = "DiagnosticWarn",
+							info = "DiagnosticInfo",
 						},
 					},
 					{ "fancy_searchcount" },
@@ -211,18 +193,9 @@ return {
 									sources = { "nvim_lsp" },
 									symbols = { error = "󰅚 ", warn = "󰀪 ", info = "󰋽 " },
 									diagnostics_color = {
-										error = function() 
-											local colors = require("theme.colors").get_colors()
-											return { fg = colors.error }
-										end,
-										warn = function() 
-											local colors = require("theme.colors").get_colors()
-											return { fg = colors.warning }
-										end,
-										info = function() 
-											local colors = require("theme.colors").get_colors()
-											return { fg = colors.info }
-										end,
+										error = "DiagnosticError",
+										warn = "DiagnosticWarn",
+										info = "DiagnosticInfo",
 									},
 								},
 								{ "fancy_searchcount" },
