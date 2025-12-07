@@ -428,7 +428,7 @@ binds {
     Super+Shift+n { spawn "/home/daphen/.config/niri/scripts/spawn-new-note"; }
 
     // Theme toggle
-    Super+Ctrl+t hotkey-overlay-title="Toggle Theme" { spawn-sh "fish -c toggle_theme"; }
+    Super+Ctrl+t hotkey-overlay-title="Toggle Theme" { spawn-sh "~/.config/themes/theme-manager.sh toggle"; }
 
     // Media and function keys for Asus Zenbook
     // Volume controls
