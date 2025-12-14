@@ -11,33 +11,100 @@
   :layer "top"
   (bar-content))
 
-; Left corner - uses exclusive false to ignore bar's exclusive zone
+; Left corner - positioned at intersection of bar and left frame
 (defwindow corner-left
   :monitor 0
   :geometry (geometry :x "0px"
-                      :y "0px"
-                      :width "16px"
-                      :height "16px"
+                      :y "-2px"
+                      :width "32px"
+                      :height "18px"
                       :anchor "top left")
-  :stacking "fg"
+  :stacking "overlay"
   :exclusive false
   :focusable false
-  :layer "top"
+  :layer "overlay"
   (box :class "corner-left"))
 
-; Right corner
+; Right corner - positioned at intersection of bar and right frame
 (defwindow corner-right
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "-2px"
+                      :width "32px"
+                      :height "18px"
+                      :anchor "top right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :layer "overlay"
+  (box :class "corner-right"))
+
+; Frame - left edge with workspace minimap
+(defwindow frame-left
   :monitor 0
   :geometry (geometry :x "0px"
                       :y "0px"
                       :width "16px"
-                      :height "16px"
+                      :height "100%"
+                      :anchor "top left")
+  :stacking "fg"
+  :exclusive false
+  :layer "top"
+  (frame-left-content))
+
+; Frame - right edge
+(defwindow frame-right
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "16px"
+                      :height "100%"
                       :anchor "top right")
   :stacking "fg"
   :exclusive false
-  :focusable false
   :layer "top"
-  (box :class "corner-right"))
+  (box :class "frame frame-right"))
+
+; Frame - bottom edge
+(defwindow frame-bottom
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "100%"
+                      :height "16px"
+                      :anchor "bottom center")
+  :stacking "fg"
+  :exclusive false
+  :layer "top"
+  (box :class "frame frame-bottom"))
+
+; Bottom-left corner - at intersection of bottom frame and left frame
+(defwindow corner-bottom-left
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "32px"
+                      :height "32px"
+                      :anchor "bottom left")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :layer "overlay"
+  (box :class "corner-bottom-left"))
+
+; Bottom-right corner - at intersection of bottom frame and right frame
+(defwindow corner-bottom-right
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "32px"
+                      :height "32px"
+                      :anchor "bottom right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :layer "overlay"
+  (box :class "corner-bottom-right"))
 
 ; Main bar content
 (defwidget bar-content []
@@ -52,7 +119,8 @@
        :space-evenly false
        :halign "start"
     (date-widget)
-    (weather-widget)))
+    (weather-widget)
+    (cpu-widget)))
 
 ; Center modules
 (defwidget center-modules []
@@ -71,6 +139,11 @@
     (battery-widget)
     (clock-widget)))
 
+; CPU widget
+(defwidget cpu-widget []
+  (box :class "cpu"
+    (label :text "${cpu-icon} ${cpu}%")))
+
 ; Date widget
 (defwidget date-widget []
   (box :class "date"
@@ -81,10 +154,16 @@
   (box :class "weather"
     (label :text "󰖙 ${weather}")))
 
-; Minimap widget (niri workspaces)
+; Minimap widget (niri windows - horizontal)
 (defwidget minimap-widget []
   (box :class "minimap"
-    (label :text "${minimap}")))
+       :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+    (for entry in window-minimap
+      (box :class "dot-h ${entry.active ? 'active' : 'inactive'}"
+           :valign "center"))))
 
 ; Network widget
 (defwidget network-widget []
@@ -108,6 +187,29 @@
   (box :class "clock"
     (label :text "󰥔 ${time}")))
 
+; Frame left content with workspace minimap
+(defwidget frame-left-content []
+  (box :class "frame frame-left-content"
+       :orientation "v"
+       :space-evenly false
+       :valign "fill"
+       :vexpand true
+       :halign "center"
+       :hexpand true
+    (box :valign "center" :vexpand true
+      (workspace-minimap-widget))))
+
+; Workspace minimap widget (vertical)
+(defwidget workspace-minimap-widget []
+  (box :class "workspace-minimap"
+       :orientation "v"
+       :space-evenly false
+       :valign "center"
+       :halign "center"
+    (for entry in workspace-minimap
+      (box :class "dot-v ${entry.active ? 'active' : 'inactive'}"
+           :halign "center"))))
+
 ; Polling variables
 (defpoll date :interval "60s"
   "date '+%a %b %d'")
@@ -118,8 +220,9 @@
 (defpoll weather :interval "1800s"
   "curl -s 'wttr.in/Stockholm?format=%t' 2>/dev/null || echo 'N/A'")
 
-(defpoll minimap :interval "1s"
-  "~/.config/waybar/scripts/niri-minimap.sh | jq -r '.text' 2>/dev/null || echo '◆'")
+(defpoll window-minimap :interval "500ms"
+  :initial "[]"
+  "~/.config/eww/scripts/window-minimap.sh")
 
 (defpoll network :interval "5s"
   "nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2 || echo 'Disconnected'")
@@ -141,3 +244,13 @@
 
 (defpoll battery-icon :interval "10s"
   "status=$(cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1); if [ \"$status\" = 'Charging' ]; then echo '󰂄'; elif [ \"$status\" = 'Full' ]; then echo '󰚥'; else cap=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1 || echo '100'); if [ $cap -lt 10 ]; then echo '󰁺'; elif [ $cap -lt 20 ]; then echo '󰁻'; elif [ $cap -lt 30 ]; then echo '󰁼'; elif [ $cap -lt 40 ]; then echo '󰁽'; elif [ $cap -lt 50 ]; then echo '󰁾'; elif [ $cap -lt 60 ]; then echo '󰁿'; elif [ $cap -lt 70 ]; then echo '󰂀'; elif [ $cap -lt 80 ]; then echo '󰂁'; elif [ $cap -lt 90 ]; then echo '󰂂'; else echo '󰁹'; fi; fi")
+
+(defpoll workspace-minimap :interval "500ms"
+  :initial "[]"
+  "~/.config/eww/scripts/workspace-minimap.sh")
+
+(defpoll cpu :interval "2s"
+  "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'")
+
+(defpoll cpu-icon :interval "2s"
+  "cpu=$(top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'); if [ $cpu -lt 25 ]; then echo '󰾆'; elif [ $cpu -lt 50 ]; then echo '󰾅'; elif [ $cpu -lt 75 ]; then echo '󰾄'; else echo '󰓅'; fi")

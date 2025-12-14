@@ -1,6 +1,14 @@
+// Reset window styles
+window {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
 // Colors - from theme system
 $bg-primary: #181818;
 $bg-secondary: #1B1B1B;
+$border-subtle: #2a2a2a;
 $fg-primary: #EDEDED;
 $fg-muted: #707B84;
 $accent-red: #FF7B72;
@@ -15,6 +23,7 @@ $accent-blue: #CCD5E4;
   color: $fg-primary;
   font-family: "GeistMono NF", "GeistMono Nerd Font", "Geist Mono", monospace;
   font-size: 14px;
+  border-bottom: 1px solid $border-subtle;
 }
 
 // Corners row
@@ -27,16 +36,16 @@ $accent-blue: #CCD5E4;
   background-image: url("/home/daphen/.config/waybar/assets/corner-left.svg");
   background-size: contain;
   background-color: transparent;
-  min-width: 16px;
-  min-height: 16px;
+  min-width: 32px;
+  min-height: 18px;
 }
 
 .corner-right {
   background-image: url("/home/daphen/.config/waybar/assets/corner-right.svg");
   background-size: contain;
   background-color: transparent;
-  min-width: 16px;
-  min-height: 16px;
+  min-width: 32px;
+  min-height: 18px;
 }
 
 // Module containers
@@ -47,6 +56,7 @@ $accent-blue: #CCD5E4;
 }
 
 // Individual widgets
+.cpu,
 .date,
 .weather,
 .minimap,
@@ -55,6 +65,10 @@ $accent-blue: #CCD5E4;
 .battery,
 .clock {
   padding: 6px 12px;
+}
+
+.cpu {
+  color: $accent-cyan;
 }
 
 .date {
@@ -66,8 +80,26 @@ $accent-blue: #CCD5E4;
 }
 
 .minimap {
-  font-size: 16px;
-  color: $fg-primary;
+  padding: 6px 12px;
+}
+
+// Horizontal dots (top bar window minimap)
+.dot-h {
+  margin: 0 4px;
+}
+
+.dot-h.active {
+  border-radius: 3px;
+  min-width: 16px;
+  min-height: 8px;
+  background: $fg-primary;
+}
+
+.dot-h.inactive {
+  border-radius: 50%;
+  min-width: 8px;
+  min-height: 8px;
+  background: $fg-muted;
 }
 
 .network {
@@ -109,4 +141,69 @@ $accent-blue: #CCD5E4;
 
 .clock {
   color: $accent-blue;
+}
+
+// Frame
+.frame {
+  background: $bg-primary;
+  border: none;
+}
+
+// Left frame content
+.frame-left-content {
+  background: $bg-primary;
+  min-width: 16px;
+  border-right: 1px solid $border-subtle;
+}
+
+// Right frame
+.frame-right {
+  background: $bg-primary;
+  border-left: 1px solid $border-subtle;
+}
+
+// Bottom frame
+.frame-bottom {
+  background: $bg-primary;
+  border-top: 1px solid $border-subtle;
+}
+
+// Workspace minimap (vertical)
+.workspace-minimap {
+  padding: 0;
+}
+
+// Vertical dots (left frame workspace minimap)
+.dot-v {
+  margin: 3px 0;
+  min-width: 4px;
+  min-height: 4px;
+}
+
+.dot-v.active {
+  border-radius: 3px;
+  min-height: 6px;
+  background: $fg-primary;
+}
+
+.dot-v.inactive {
+  border-radius: 50%;
+  background: $fg-muted;
+}
+
+// Bottom corners - inverse rounded corners using SVG
+.corner-bottom-left {
+  background-image: url("/home/daphen/.config/waybar/assets/corner-bottom-left.svg");
+  background-size: contain;
+  background-color: transparent;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.corner-bottom-right {
+  background-image: url("/home/daphen/.config/waybar/assets/corner-bottom-right.svg");
+  background-size: contain;
+  background-color: transparent;
+  min-width: 32px;
+  min-height: 32px;
 }

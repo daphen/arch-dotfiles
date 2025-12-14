@@ -118,7 +118,7 @@ output "DP-2" {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 24
+    gaps 14
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -261,10 +261,10 @@ layout {
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
     struts {
-        // left 64
-        // right 64
-        // top 64
-        // bottom 64
+        left 10
+        right 10
+        top -6
+        bottom 10
     }
 }
 
@@ -273,9 +273,8 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// This line starts waybar, a commonly used bar for Wayland compositors.
-// Using pgrep guard to prevent multiple waybars spawning on resume/reconnect
-spawn-sh-at-startup "pgrep -x waybar || waybar"
+// This line starts eww bar
+spawn-sh-at-startup "pkill -x eww; sleep 0.2; eww open bar && eww open corner-left && eww open corner-right && eww open frame-left && eww open frame-right && eww open frame-bottom && eww open corner-bottom-left && eww open corner-bottom-right"
 
 // Auto-restore wallpaper on startup with waypaper
 spawn-at-startup "waypaper" "--restore"
@@ -358,10 +357,23 @@ window-rule {
     clip-to-geometry true
 }
 
+// Disable corner radius for eww bar (it handles its own corners)
+layer-rule {
+    match namespace="^gtk-layer-shell$"
+    geometry-corner-radius 0
+}
+
 // Work around WezTerm's initial configure bug
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width { }
+}
+
+// Kitty terminal - 50% width, full height
+window-rule {
+    match app-id=r#"^kitty$"#
+    default-column-width { proportion 0.5; }
+    default-window-height { proportion 1.0; }
 }
 
 // Float calculator, file pickers, and other dialogs
@@ -384,6 +396,14 @@ window-rule {
 window-rule {
     match app-id="notes-scratchpad"
     // No special rules - behaves like normal tiled window
+}
+
+// Clipse clipboard manager - floating with fixed size
+window-rule {
+    match app-id="clipse"
+    open-floating true
+    default-column-width { fixed 800; }
+    default-window-height { fixed 600; }
 }
 
 binds {
@@ -417,10 +437,10 @@ binds {
     Super+g { spawn-sh "$HOME/.config/niri/scripts/spawn-terminal-with-claude"; }
     Super+f { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec zen zen-browser"; }
     Super+Shift+f { spawn "zen-browser"; }
-    Super+d { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec org.wezfurlong.wezterm wezterm"; }
-    Super+Shift+d { spawn "wezterm"; }
+    Super+d { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec kitty kitty"; }
+    Super+Shift+d { spawn-sh "SHOW_FASTFETCH=1 kitty"; }
     Super+s { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec Slack '/usr/bin/slack --disable-gpu-compositing --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --enable-features=WebRTCPipeWireCapturer --enable-features=WaylandWindowDecorations --disable-features=WaylandFractionalScaleV1'"; }
-    Super+a { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'title:spotify_player' 'wezterm start --always-new-process -- /usr/bin/spotify_player'"; }
+    Super+a { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'title:spotify_player' 'kitty --class spotify_player /usr/bin/spotify_player'"; }
     Super+t { spawn-sh "$HOME/.config/niri/scripts/niri-jump-or-exec 'Microsoft Teams' 'teams-for-linux --enable-features=WebRTCPipeWireCapturer --ozone-platform=wayland'"; }
 
     // Notes - tiled window like spotify/claude
@@ -499,13 +519,11 @@ binds {
     Super+Ctrl+c { spawn "niri" "msg" "pick-color"; }  // Pick color from screen
 
     // Rofi keybinds
-    Super+Ctrl+V { spawn "/home/daphen/.config/niri/scripts/clipboard-history.sh"; }  // Open clipboard history
+    Super+Ctrl+V { spawn "kitty" "--class" "clipse" "-o" "initial_window_width=800" "-o" "initial_window_height=600" "clipse"; }  // Open clipboard history (clipse in floating terminal)
     Super+Ctrl+J { spawn "rofimoji" "--action" "copy" "type" "--selector" "rofi"; }  // Open emoji picker (copy + auto-type)
     Super+Ctrl+B { spawn "rofi-bluetooth"; }  // Open bluetooth menu
 }
 
-// Clipboard management with cliphist
-spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
-spawn-at-startup "wl-paste" "--primary" "--watch" "cliphist" "store"
-// Sync primary selection to clipboard (fixes wezterm copy mode)
-spawn-at-startup "wl-paste" "--primary" "--watch" "wl-copy"
+// Clipboard management with clipse
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+spawn-at-startup "clipse" "--listen"
