@@ -8,7 +8,7 @@ window {
 // Colors - from theme system
 $bg-primary: #181818;
 $bg-secondary: #1B1B1B;
-$border-subtle: #2a2a2a;
+$border-subtle: #292826;
 $fg-primary: #EDEDED;
 $fg-muted: #707B84;
 $accent-red: #FF7B72;
@@ -33,7 +33,7 @@ $accent-blue: #CCD5E4;
 
 // Inverse rounded corners - using SVG
 .corner-left {
-  background-image: url("/home/daphen/.config/waybar/assets/corner-left.svg");
+  background-image: url("/home/daphen/.config/eww/assets/corner-left.svg");
   background-size: contain;
   background-color: transparent;
   min-width: 32px;
@@ -41,7 +41,7 @@ $accent-blue: #CCD5E4;
 }
 
 .corner-right {
-  background-image: url("/home/daphen/.config/waybar/assets/corner-right.svg");
+  background-image: url("/home/daphen/.config/eww/assets/corner-right.svg");
   background-size: contain;
   background-color: transparent;
   min-width: 32px;
@@ -193,7 +193,7 @@ $accent-blue: #CCD5E4;
 
 // Bottom corners - inverse rounded corners using SVG
 .corner-bottom-left {
-  background-image: url("/home/daphen/.config/waybar/assets/corner-bottom-left.svg");
+  background-image: url("/home/daphen/.config/eww/assets/corner-bottom-left.svg");
   background-size: contain;
   background-color: transparent;
   min-width: 32px;
@@ -201,7 +201,7 @@ $accent-blue: #CCD5E4;
 }
 
 .corner-bottom-right {
-  background-image: url("/home/daphen/.config/waybar/assets/corner-bottom-right.svg");
+  background-image: url("/home/daphen/.config/eww/assets/corner-bottom-right.svg");
   background-size: contain;
   background-color: transparent;
   min-width: 32px;
