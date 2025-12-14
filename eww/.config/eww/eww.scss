@@ -34,18 +34,18 @@ $accent-blue: #CCD5E4;
 // Inverse rounded corners - using SVG
 .corner-left {
   background-image: url("/home/daphen/.config/eww/assets/corner-left.svg");
-  background-size: contain;
+  background-size: 30px 14px;
   background-color: transparent;
-  min-width: 32px;
-  min-height: 18px;
+  min-width: 30px;
+  min-height: 14px;
 }
 
 .corner-right {
   background-image: url("/home/daphen/.config/eww/assets/corner-right.svg");
-  background-size: contain;
+  background-size: 24px 14px;
   background-color: transparent;
-  min-width: 32px;
-  min-height: 18px;
+  min-width: 24px;
+  min-height: 14px;
 }
 
 // Module containers
@@ -194,16 +194,16 @@ $accent-blue: #CCD5E4;
 // Bottom corners - inverse rounded corners using SVG
 .corner-bottom-left {
   background-image: url("/home/daphen/.config/eww/assets/corner-bottom-left.svg");
-  background-size: contain;
+  background-size: 28px 22px;
   background-color: transparent;
-  min-width: 32px;
-  min-height: 32px;
+  min-width: 28px;
+  min-height: 22px;
 }
 
 .corner-bottom-right {
   background-image: url("/home/daphen/.config/eww/assets/corner-bottom-right.svg");
-  background-size: contain;
+  background-size: 22px 22px;
   background-color: transparent;
-  min-width: 32px;
-  min-height: 32px;
+  min-width: 22px;
+  min-height: 22px;
 }
