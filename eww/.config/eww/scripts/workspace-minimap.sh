@@ -1,14 +1,35 @@
 #!/bin/bash
 
+# Get target output from argument (e.g., "DP-1" or "eDP-1")
+target_output="${1:-}"
+
 # Get all workspaces
 workspaces=$(niri msg workspaces 2>/dev/null)
 
-# Build JSON array of workspace states
+# Build JSON array of workspace states for the target output
 json="["
 first=true
+current_output=""
+in_target_output=false
+
 while IFS= read -r line; do
-    # Skip empty lines and output header
-    [[ -z "$line" || "$line" =~ ^Output ]] && continue
+    # Skip empty lines
+    [[ -z "$line" ]] && continue
+
+    # Check if this is an output header line
+    if [[ "$line" =~ ^Output\ \"(.*)\":$ ]]; then
+        current_output="${BASH_REMATCH[1]}"
+        # If no target specified, match all; otherwise check if we're in the target output
+        if [[ -z "$target_output" ]] || [[ "$current_output" == "$target_output" ]]; then
+            in_target_output=true
+        else
+            in_target_output=false
+        fi
+        continue
+    fi
+
+    # Skip if we're not in the target output
+    [[ "$in_target_output" != true ]] && continue
 
     # Check if this is the active workspace (has *)
     if [[ "$line" =~ \* ]]; then

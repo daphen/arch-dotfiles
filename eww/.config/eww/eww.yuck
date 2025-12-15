@@ -9,7 +9,7 @@
   :stacking "fg"
   :exclusive true
   :layer "top"
-  (bar-content))
+  (bar-content :minimap-data window-minimap-0))
 
 ; Left corner - positioned at intersection of bar and left frame
 (defwindow corner-left
@@ -50,7 +50,7 @@
   :stacking "fg"
   :exclusive false
   :layer "top"
-  (frame-left-content))
+  (frame-left-content :minimap-data workspace-minimap-0))
 
 ; Frame - right edge
 (defwindow frame-right
@@ -120,7 +120,7 @@
   :stacking "fg"
   :exclusive true
   :layer "top"
-  (bar-content))
+  (bar-content :minimap-data window-minimap-1))
 
 (defwindow corner-left-1
   :monitor 1
@@ -158,7 +158,7 @@
   :stacking "fg"
   :exclusive false
   :layer "top"
-  (frame-left-content))
+  (frame-left-content :minimap-data workspace-minimap-1))
 
 (defwindow frame-right-1
   :monitor 1
@@ -211,10 +211,10 @@
   (box :class "corner-bottom-right"))
 
 ; Main bar content
-(defwidget bar-content []
+(defwidget bar-content [minimap-data]
   (centerbox :class "bar"
     (left-modules)
-    (center-modules)
+    (center-modules :minimap-data minimap-data)
     (right-modules)))
 
 ; Left side modules
@@ -227,11 +227,11 @@
     (cpu-widget)))
 
 ; Center modules
-(defwidget center-modules []
+(defwidget center-modules [minimap-data]
   (box :class "modules-center"
        :space-evenly false
        :halign "center"
-    (minimap-widget)))
+    (minimap-widget :data minimap-data)))
 
 ; Right side modules
 (defwidget right-modules []
@@ -259,13 +259,13 @@
     (label :text "󰖙 ${weather}")))
 
 ; Minimap widget (niri windows - horizontal)
-(defwidget minimap-widget []
+(defwidget minimap-widget [data]
   (box :class "minimap"
        :orientation "h"
        :space-evenly false
        :halign "center"
        :valign "center"
-    (for entry in window-minimap
+    (for entry in data
       (box :class "dot-h ${entry.active ? 'active' : 'inactive'}"
            :valign "center"))))
 
@@ -291,8 +291,8 @@
   (box :class "clock"
     (label :text "󰥔 ${time}")))
 
-; Frame left content with workspace minimap
-(defwidget frame-left-content []
+; Frame left content with workspace minimap (takes monitor-specific minimap data)
+(defwidget frame-left-content [minimap-data]
   (box :class "frame frame-left-content"
        :orientation "v"
        :space-evenly false
@@ -301,16 +301,16 @@
        :halign "center"
        :hexpand true
     (box :valign "center" :vexpand true
-      (workspace-minimap-widget))))
+      (workspace-minimap-widget :data minimap-data))))
 
 ; Workspace minimap widget (vertical)
-(defwidget workspace-minimap-widget []
+(defwidget workspace-minimap-widget [data]
   (box :class "workspace-minimap"
        :orientation "v"
        :space-evenly false
        :valign "center"
        :halign "center"
-    (for entry in workspace-minimap
+    (for entry in data
       (box :class "dot-v ${entry.active ? 'active' : 'inactive'}"
            :halign "center"))))
 
@@ -324,9 +324,14 @@
 (defpoll weather :interval "1800s"
   "curl -s 'wttr.in/Stockholm?format=%t' 2>/dev/null || echo 'N/A'")
 
-(defpoll window-minimap :interval "500ms"
+; Per-monitor window minimaps
+(defpoll window-minimap-0 :interval "500ms"
   :initial "[]"
-  "~/.config/eww/scripts/window-minimap.sh")
+  "~/.config/eww/scripts/window-minimap.sh 'eDP-1'")
+
+(defpoll window-minimap-1 :interval "500ms"
+  :initial "[]"
+  "~/.config/eww/scripts/window-minimap.sh 'DP-1'")
 
 (defpoll network :interval "5s"
   "nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2 || echo 'Disconnected'")
@@ -341,17 +346,22 @@
   "sink=$(pactl get-default-sink); muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -q 'yes' && echo 'yes'); if [ \"$muted\" = 'yes' ]; then echo '󰝟'; elif echo \"$sink\" | grep -q 'bluez'; then echo '󰂯'; elif echo \"$sink\" | grep -qi 'headphone\\|headset'; then echo '󰋋'; else vol=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+%' | head -1 | tr -d '%'); if [ $vol -lt 33 ]; then echo '󰕿'; elif [ $vol -lt 66 ]; then echo '󰖀'; else echo '󰕾'; fi; fi")
 
 (defpoll battery :interval "10s"
-  "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1 || echo '100'")
+  "cap=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1 || echo '100'); [ $cap -gt 100 ] && echo '100' || echo $cap")
 
 (defpoll battery-status :interval "10s"
   "cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1 | tr '[:upper:]' '[:lower:]' || echo 'full'")
 
 (defpoll battery-icon :interval "10s"
-  "status=$(cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1); if [ \"$status\" = 'Charging' ]; then echo '󰂄'; elif [ \"$status\" = 'Full' ]; then echo '󰚥'; else cap=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1 || echo '100'); if [ $cap -lt 10 ]; then echo '󰁺'; elif [ $cap -lt 20 ]; then echo '󰁻'; elif [ $cap -lt 30 ]; then echo '󰁼'; elif [ $cap -lt 40 ]; then echo '󰁽'; elif [ $cap -lt 50 ]; then echo '󰁾'; elif [ $cap -lt 60 ]; then echo '󰁿'; elif [ $cap -lt 70 ]; then echo '󰂀'; elif [ $cap -lt 80 ]; then echo '󰂁'; elif [ $cap -lt 90 ]; then echo '󰂂'; else echo '󰁹'; fi; fi")
+  "status=$(cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1); if [ \"$status\" = 'Charging' ]; then echo '󱐋'; elif [ \"$status\" = 'Full' ]; then echo '󰁹'; else cap=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1 || echo '100'); if [ $cap -lt 10 ]; then echo '󰁺'; elif [ $cap -lt 20 ]; then echo '󰁻'; elif [ $cap -lt 30 ]; then echo '󰁼'; elif [ $cap -lt 40 ]; then echo '󰁽'; elif [ $cap -lt 50 ]; then echo '󰁾'; elif [ $cap -lt 60 ]; then echo '󰁿'; elif [ $cap -lt 70 ]; then echo '󰂀'; elif [ $cap -lt 80 ]; then echo '󰂁'; elif [ $cap -lt 90 ]; then echo '󰂂'; else echo '󰁹'; fi; fi")
 
-(defpoll workspace-minimap :interval "500ms"
+; Per-monitor workspace minimaps
+(defpoll workspace-minimap-0 :interval "500ms"
   :initial "[]"
-  "~/.config/eww/scripts/workspace-minimap.sh")
+  "~/.config/eww/scripts/workspace-minimap.sh 'eDP-1'")
+
+(defpoll workspace-minimap-1 :interval "500ms"
+  :initial "[]"
+  "~/.config/eww/scripts/workspace-minimap.sh 'DP-1'")
 
 (defpoll cpu :interval "2s"
   "top -bn1 | grep 'Cpu(s)' | awk '{print int($2)}'")
