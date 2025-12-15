@@ -18,8 +18,8 @@ if niri msg windows | grep -q "$NOTES_CLASS"; then
         niri msg action focus-window --app-id "$NOTES_CLASS"
     fi
 else
-    # Spawn new notes terminal (--always-new-process ensures --class is applied)
+    # Spawn new notes terminal
     mkdir -p "$NOTES_DIR"
     # Pull latest notes before opening
-    wezterm start --always-new-process --class "$NOTES_CLASS" -- fish -c "cd $NOTES_DIR && notes pull && notes edit || nvim ."
+    kitty --class "$NOTES_CLASS" --directory "$NOTES_DIR" fish -c "notes pull && notes edit || nvim ."
 fi

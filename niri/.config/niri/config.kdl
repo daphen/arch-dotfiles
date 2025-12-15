@@ -118,7 +118,7 @@ output "DP-2" {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 14
+    gaps 18
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -261,10 +261,10 @@ layout {
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
     struts {
-        left 10
-        right 10
-        top -6
-        bottom 10
+        left 16
+        right 8
+        top -2
+        bottom 8
     }
 }
 
@@ -274,7 +274,7 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts eww bar
-spawn-sh-at-startup "pkill -x eww; sleep 0.2; eww open bar && eww open corner-left && eww open corner-right && eww open frame-left && eww open frame-right && eww open frame-bottom && eww open corner-bottom-left && eww open corner-bottom-right"
+spawn-at-startup "~/.config/eww/start-eww.sh"
 
 // Auto-restore wallpaper on startup with waypaper
 spawn-at-startup "waypaper" "--restore"

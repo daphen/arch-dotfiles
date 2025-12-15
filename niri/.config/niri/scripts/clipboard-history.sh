@@ -1,3 +1,8 @@
 #!/bin/bash
-# Clipboard history picker using rofi and cliphist
-cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
+# Clipboard history picker using rofi and cliphist with image preview
+
+selected=$(cliphist list | rofi -dmenu -p "Clipboard")
+
+if [[ -n "$selected" ]]; then
+    echo "$selected" | cliphist decode | wl-copy
+fi

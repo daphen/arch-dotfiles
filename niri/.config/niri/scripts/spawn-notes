@@ -1,4 +1,4 @@
 #!/bin/bash
 # Spawn the Go TUI notes browser with fuzzy search and background sync
 
-wezterm start -- /home/daphen/personal/notes/cli/notes-cli
+kitty /home/daphen/personal/notes/cli/notes-cli

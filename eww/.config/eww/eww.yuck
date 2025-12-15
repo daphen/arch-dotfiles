@@ -19,10 +19,10 @@
                       :width "30px"
                       :height "14px"
                       :anchor "top left")
-  :stacking "overlay"
+  :stacking "fg"
   :exclusive false
   :focusable false
-  :layer "overlay"
+  :layer "top"
   (box :class "corner-left"))
 
 ; Right corner - positioned at intersection of bar and right frame
@@ -33,10 +33,10 @@
                       :width "24px"
                       :height "14px"
                       :anchor "top right")
-  :stacking "overlay"
+  :stacking "fg"
   :exclusive false
   :focusable false
-  :layer "overlay"
+  :layer "top"
   (box :class "corner-right"))
 
 ; Frame - left edge with workspace minimap
@@ -86,10 +86,10 @@
                       :width "28px"
                       :height "22px"
                       :anchor "bottom left")
-  :stacking "overlay"
+  :stacking "fg"
   :exclusive false
   :focusable false
-  :layer "overlay"
+  :layer "top"
   (box :class "corner-bottom-left"))
 
 ; Bottom-right corner - at intersection of bottom frame and right frame
@@ -100,10 +100,114 @@
                       :width "22px"
                       :height "22px"
                       :anchor "bottom right")
-  :stacking "overlay"
+  :stacking "fg"
   :exclusive false
   :focusable false
-  :layer "overlay"
+  :layer "top"
+  (box :class "corner-bottom-right"))
+
+; ============================================
+; Monitor 1 (external display) windows
+; ============================================
+
+(defwindow bar-1
+  :monitor 1
+  :geometry (geometry :x "0%"
+                      :y "0px"
+                      :width "100%"
+                      :height "33px"
+                      :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :layer "top"
+  (bar-content))
+
+(defwindow corner-left-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "-1px"
+                      :width "30px"
+                      :height "14px"
+                      :anchor "top left")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :layer "top"
+  (box :class "corner-left"))
+
+(defwindow corner-right-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "-1px"
+                      :width "24px"
+                      :height "14px"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :layer "top"
+  (box :class "corner-right"))
+
+(defwindow frame-left-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "16px"
+                      :height "100%"
+                      :anchor "top left")
+  :stacking "fg"
+  :exclusive false
+  :layer "top"
+  (frame-left-content))
+
+(defwindow frame-right-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "10px"
+                      :height "100%"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :layer "top"
+  (box :class "frame frame-right"))
+
+(defwindow frame-bottom-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "100%"
+                      :height "10px"
+                      :anchor "bottom center")
+  :stacking "fg"
+  :exclusive false
+  :layer "top"
+  (box :class "frame frame-bottom"))
+
+(defwindow corner-bottom-left-1
+  :monitor 1
+  :geometry (geometry :x "1px"
+                      :y "0px"
+                      :width "28px"
+                      :height "22px"
+                      :anchor "bottom left")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :layer "top"
+  (box :class "corner-bottom-left"))
+
+(defwindow corner-bottom-right-1
+  :monitor 1
+  :geometry (geometry :x "0px"
+                      :y "0px"
+                      :width "22px"
+                      :height "22px"
+                      :anchor "bottom right")
+  :stacking "fg"
+  :exclusive false
+  :focusable false
+  :layer "top"
   (box :class "corner-bottom-right"))
 
 ; Main bar content

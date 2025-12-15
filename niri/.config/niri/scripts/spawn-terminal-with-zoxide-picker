@@ -1,9 +1,9 @@
 #!/bin/bash
 # Spawn a new terminal with zoxide interactive directory picker
 
-# Spawn wezterm with an interactive zoxide picker
+# Spawn kitty with an interactive zoxide picker
 # After selection, stay in that directory with a new shell
-wezterm start -- fish -c "
+kitty fish -c "
     # Use zoxide's interactive picker to select a directory
     set selected_dir (zoxide query -l | fzf --height=40% --reverse --border --prompt='Select directory: ')
 

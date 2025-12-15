@@ -54,5 +54,5 @@ fi
 CWD="${CWD:-$HOME}"
 echo "Final CWD: $CWD" >> "$DEBUG_LOG"
 
-# Spawn wezterm at the determined directory and run yazi with that directory
-wezterm start --cwd "$CWD" -- yazi "$CWD"
+# Spawn kitty at the determined directory and run yazi with that directory
+kitty --directory "$CWD" yazi "$CWD"

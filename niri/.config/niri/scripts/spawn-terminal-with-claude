@@ -32,5 +32,5 @@ fi
 # Fallback to home directory if we couldn't determine the cwd
 CWD="${CWD:-$HOME}"
 
-# Spawn wezterm at the determined directory and run claude
-wezterm start --cwd "$CWD" -- fish -c "claude"
+# Spawn kitty at the determined directory and run claude
+kitty --directory "$CWD" fish -c "claude"
