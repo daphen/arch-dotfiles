@@ -13,5 +13,7 @@ sleep 8
 # Open all windows on monitor 0 (order matters for z-stacking: frames first, then corners on top)
 eww open-many bar frame-left frame-right frame-bottom corner-left corner-right corner-bottom-left corner-bottom-right
 
-# Open all windows on monitor 1 (external display, silent fail if not present)
-eww open-many bar-1 frame-left-1 frame-right-1 frame-bottom-1 corner-left-1 corner-right-1 corner-bottom-left-1 corner-bottom-right-1 2>/dev/null || true
+# Only open monitor 1 windows if DP-1 (external display) is actually connected
+if niri msg outputs 2>/dev/null | grep -q '(DP-1)'; then
+    eww open-many bar-1 frame-left-1 frame-right-1 frame-bottom-1 corner-left-1 corner-right-1 corner-bottom-left-1 corner-bottom-right-1
+fi
