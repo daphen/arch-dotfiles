@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# Get target output from argument (e.g., "DP-1" or "eDP-1")
+# Get target output from argument (e.g., "DP-1", "eDP-1", or "external" for auto-detect)
 target_output="${1:-}"
+
+# Auto-detect external monitor if "external" is passed
+if [[ "$target_output" == "external" ]]; then
+    target_output=$(niri msg outputs 2>/dev/null | grep -oP '\(DP-[0-9]+\)' | head -1 | tr -d '()')
+    [[ -z "$target_output" ]] && { echo '[]'; exit 0; }
+fi
 
 # Get all workspaces
 workspaces=$(niri msg workspaces 2>/dev/null)
