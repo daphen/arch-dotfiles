@@ -1,5 +1,5 @@
-;; Kanata configuration with homerow mods
-;; Basic setup for QWERTY layout with homerow modifiers
+;; Kanata configuration - ported from Piantor Vial layout
+;; Layer triggers: n=symbols-left, c=symbols-right, n+c=media
 
 (defcfg
   process-unmapped-keys yes
@@ -9,25 +9,18 @@
   chords-v2-min-idle 25
   linux-x11-repeat-delay-rate 400,50
   danger-enable-cmd yes
-  ;; Exclude Piantor - it has its own firmware handling layers and Swedish chars
-  ;; Must exclude all Piantor device interfaces (keyboard, consumer control, system control)
   linux-dev-names-exclude (
     "beekeeb Piantor Pro Keyboard"
     "beekeeb Piantor Pro Consumer Control"
     "beekeeb Piantor Pro System Control"
     "beekeeb Piantor Pro"
   )
-  ;; macos-dev-names-exclude ("Piantor Pro")
 )
 
 ;; Swedish character architecture:
-;; - Physical [;' → Kanata sends 1/2/3 keycodes
-;; - XKB remaps 1/2/3 → å/ö/ä characters
-;; - For brackets/symbols: use n-layer or right bracket key
+;; - Physical [;' → Kanata sends slck/pause/home keycodes
+;; - XKB remaps these → å/ö/ä characters
 
-
-
-;; Define source layer (Standard PC keyboard layout)
 (defsrc
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
@@ -37,69 +30,66 @@
   lctl lmet lalt           spc            ralt rmet cmp  rctl
 )
 
-;; Define layer switching and symbol aliases
+;; Chord: n+c together activates media layer
+(defchordsv2
+  (n c) (layer-while-held media) 50 first-release ()
+)
+
 (defalias
   ;; Layer switches
-  d_sym (tap-hold-release 250 250 d (layer-while-held braces))
-  c_nav (tap-hold-release 250 250 c (layer-while-held navigation))
-
-  ;; n-key activates bracket-symbols layer when held
-  n_sym (tap-hold-release 200 200 n (layer-while-held bracket-symbols))
+  n_sym (tap-hold-release 200 200 n (layer-while-held symbols-left))
+  c_sym (tap-hold-release 200 200 c (layer-while-held symbols-right))
 
   ;; Caps lock as escape when tapped, control when held
-  ;; (Caps is already Ctrl in XKB, Kanata adds tap-for-Esc on top)
   esc_ctl (tap-hold-press 200 200 esc lctl)
 
   ;; Right shift that produces colon when combined with ö key
   rsft_colon (multi rsft (layer-while-held rsft-layer))
 )
 
-;; Define the main layer (PC keyboard layout)
-;; Swapped: lmet->lalt, lalt->lmet (Super and Alt are swapped)
-;; Note: åäö are handled by XKB (keys [ ; ' produce å ö ä)
 (deflayer base
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   _    _    _
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    home ]    \
-  @esc_ctl a    s    @d_sym f    g    h    j    k    l    slck pause ret
-  lsft z    x    @c_nav v    b    @n_sym m    ,    .    /    @rsft_colon
+  @esc_ctl a    s    d    f    g    h    j    k    l    slck pause ret
+  lsft z    x    @c_sym v    b    @n_sym m    ,    .    /    @rsft_colon
   lctl lalt lmet           spc            ralt rmet cmp  rctl
 )
 
-;; Define braces layer (activated when holding d)
-(deflayer braces
+;; Symbols LEFT (hold n) - left hand symbols from Piantor
+;; ` ! @ ( ) ; on qwert, Alt # [ { } ] on asdfg, ^ < > % on xcvb
+(deflayer symbols-left
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    [    ]    _    _    grv  _
-  _    _    _    _    _    _    _    _    _    _    _    _
+  grv  S-1  S-2  S-9  S-0  ;    _    _    _    _    _    _    _    _
+  lalt S-3  [    S-[  S-]  ]    _    _    _    _    _    _    _
+  _    _    S-6  S-,  S-.  S-5  _    _    _    _    _    _
   _    _    _              _              _    _    _    _
 )
 
-;; Define navigation layer (activated when holding c)
-;; Arrow keys on hjkl, quotes on io: i = ' (single quote), o = " (S-' double quote)
-(deflayer navigation
+;; Symbols RIGHT (hold c) - right hand symbols from Piantor
+;; : ' " C-6 * bksp on yuiop[, arrows on hjkl, - + = * | on m,./
+(deflayer symbols-right
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    '    S-'  _    _    _    _
+  _    _    _    _    _    _    S-;  '    S-'  C-6  S-8  bspc _    _
   _    _    _    _    _    _    left down up   rght _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    S-=  =    S-8  S-\  _
   _    _    _              _              _    _    _    _
 )
 
-;; Define bracket-symbols layer (activated when holding n)
-;; Home row: s = [ , d = { (S-[), f = } (S-]), g = ]
-;; Top row: e = ( (S-9), r = ) (S-0)
-(deflayer bracket-symbols
+;; Media layer (chord n+c)
+;; q/w=screen brightness, a/s=volume, k/l=keyboard brightness
+(deflayer media
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    S-9  S-0  _    _    _    _    _    _    _    _    _
-  _    _    [    S-[  S-]  ]    _    _    _    _    _    _    _
+  _    brdn brup _    _    _    _    _    _    _    _    _    _    _
+  _    vold volu _    _    _    _    _    bldn blup _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _              _              _    _    _    _
 )
 
-;; Define right shift layer (ö becomes colon when right shift is held)
+;; Right shift layer (ö becomes colon when right shift is held)
 (deflayer rsft-layer
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
